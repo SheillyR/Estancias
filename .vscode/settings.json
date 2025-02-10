@@ -1,0 +1,8 @@
+{
+    "java.project.sourcePaths": ["src"],
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "/Users/sheilly/Documents/JAVA-GLOBANT 2024/Egg/JDBC/mysql-connector-java-8.0.13 2/mysql-connector-java-8.0.13.jar"
+    ]
+}
