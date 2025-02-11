@@ -1,12 +1,16 @@
+import java.text.SimpleDateFormat;
+import java.sql.Date;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 import dto.ClienteEstanciaDTO;
 import entidades.Casa;
+import entidades.Estancia;
 import entidades.Familia;
 import servicios.CasaServicio;
 import servicios.ClienteServicio;
+import servicios.EstanciaServicio;
 import servicios.FamiliaServicio;
 
 public class App {
@@ -15,6 +19,7 @@ public class App {
     FamiliaServicio familiaServicio = new FamiliaServicio();
     CasaServicio casaServicio = new CasaServicio();
     ClienteServicio clienteServicio = new ClienteServicio();
+    EstanciaServicio estanciaServicio = new EstanciaServicio();
 
     while (true) {
       System.out.println(
@@ -42,6 +47,7 @@ public class App {
           case 1 -> buscarYListarFamilias(familiaServicio);
           case 2 -> buscarCasasPorPeriodo(casaServicio);
           case 5 -> buscarClienteEstancia(clienteServicio);
+          case 10 -> registrarNuevaEstancia(keyboard, estanciaServicio);
           case 11 -> {
             System.out.println("Saliendo del programa...");
             keyboard.close();
@@ -98,6 +104,42 @@ public class App {
     } catch (Exception e) {
       System.out.println("Error al obtener los clientes: " + e.getMessage());
 
+    }
+  }
+
+  public static void registrarNuevaEstancia(Scanner keyboard, EstanciaServicio estanciaServicio) {
+    try {
+      System.out.print("Ingrese ID de cliente: ");
+      int idCliente = keyboard.nextInt();
+      System.out.print("Ingrese ID de casa: ");
+      int idCasa = keyboard.nextInt();
+      keyboard.nextLine();
+      System.out.println("Ingrese el nombre del huesped: ");
+      String nombreHuesped = keyboard.nextLine();
+
+      SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+      System.out.print("Ingrese fecha de inicio (YYYY-MM-DD): ");
+      java.util.Date utilFechaDesde = dateFormat.parse(keyboard.nextLine());
+      System.out.print("Ingrese fecha de fin (YYYY-MM-DD): ");
+      java.util.Date utilFechaHasta = dateFormat.parse(keyboard.nextLine());
+
+      // Convertir java.util.Date a java.sql.Date
+      Date fechaDesde = new Date(utilFechaDesde.getTime());
+      Date fechaHasta = new Date(utilFechaHasta.getTime());
+
+      Estancia estancia = new Estancia();
+
+      estancia.setIdCliente(idCliente);
+      estancia.setIdCasa(idCasa);
+      estancia.setNombreHuesped(nombreHuesped);
+      estancia.setFechaDesde(fechaDesde);
+      estancia.setFechaHasta(fechaHasta);
+
+      estanciaServicio.registrarEstanciaServ(estancia);
+      System.out.println("Estancia registrada exitosamente.");
+    } catch (Exception e) {
+      System.out.println("Error al registrar la estancia: " + e.getMessage());
     }
   }
 }
